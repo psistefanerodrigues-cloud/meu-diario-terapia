@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#2C1216">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Meu diário">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 40 40%27%3E%3Crect x=%277%27 y=%278%27 width=%2724%27 height=%2729%27 rx=%273.5%27 fill=%27%23F2EAE0%27 stroke=%27%23D9C6B2%27 stroke-width=%271%27/%3E%3Cpath d=%27M10.5 8h1.5v29h-1.5A3.5 3.5 0 0 1 7 33.5v-22A3.5 3.5 0 0 1 10.5 8z%27 fill=%27%23C28A5A%27/%3E%3Cpath d=%27M15 21q1.8-2.4 3.6 0M22.4 21q1.8-2.4 3.6 0%27 fill=%27none%27 stroke=%27%232C1216%27 stroke-width=%271.8%27 stroke-linecap=%27round%27/%3E%3Cpath d=%27M15.6 26q4.9 4 9.8 0%27 fill=%27none%27 stroke=%27%232C1216%27 stroke-width=%271.8%27 stroke-linecap=%27round%27/%3E%3Cpath d=%27M34 2c.45 3.8 1.7 5.05 5.5 5.5-3.8.45-5.05 1.7-5.5 5.5-.45-3.8-1.7-5.05-5.5-5.5 3.8-.45 5.05-1.7 5.5-5.5z%27 fill=%27%23C28A5A%27/%3E%3C/svg%3E">
+<title>Meu Diário da Terapia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Paleta do site da Stefane: vinho profundo, argila, ocre e papel. Topo vinho, cartões claros, abas fixas embaixo */
+  --vinho:#2C1216;
+  --vinho-claro:#A8472C;
+  --ocre:#C28A5A;
+  --rosa:#E7DACC;
+  --creme:#F2EAE0;
+  --papel:#FBF7F1;
+  --tinta:#2C1E1A;
+  --cinza:#6C5448;
+  --linha:#E1D3C3;
+  --display:"Fraunces", Georgia, serif;
+  --body:"Outfit", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color-scheme: light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--creme);color:var(--tinta);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--vinho);outline-offset:2px}
+
+.app{max-width:520px;margin:0 auto;padding:0 16px 10px}
+footer.assinatura{display:block}
+header.top{background:var(--vinho);color:var(--creme);margin:0 -16px;padding:18px 20px 24px;border-radius:0 0 28px 28px}
+header.top h1{color:var(--creme);font-size:38px;margin-top:20px}
+header.top h1 em{color:var(--ocre)}
+header.top .data-hoje{color:rgba(242,234,224,.7)}
+.saud-sub{margin:6px 0 0;font-size:17px;color:rgba(242,234,224,.85);font-weight:300}
+.logo{display:flex;align-items:center;gap:9px;font-family:var(--display);font-size:17px;color:var(--creme)}
+.logo em{color:var(--ocre)}
+.logo-svg{width:34px;height:34px;flex:none}
+.logo.escuro{color:var(--vinho)}
+.logo.escuro em{color:var(--vinho-claro)}
+.por{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--cinza);margin-top:8px}
+.topo-linha{display:flex;align-items:center;gap:12px}
+.marca{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--vinho-claro);font-weight:600}
+h1{font-family:var(--display);font-weight:300;font-size:36px;line-height:1.05;margin:4px 0 0;color:var(--vinho);text-wrap:balance}
+h1 em{font-style:italic;color:var(--vinho-claro)}
+h2{font-family:var(--display);font-weight:400;font-variation-settings:"opsz" 30;font-size:24px;margin:0;color:var(--vinho)}
+.data-hoje{font-size:13px;color:var(--cinza);text-align:right;white-space:nowrap}
+.estrela{color:var(--vinho-claro)}
+
+.aviso-demo{margin:12px 0 4px;background:var(--rosa);border-radius:12px;padding:10px 12px;font-size:14px;display:flex;gap:10px;align-items:center;justify-content:space-between}
+.aviso-demo button{background:none;border:0;color:var(--vinho);font-weight:700;text-decoration:underline;padding:4px;white-space:nowrap}
+
+.card{background:var(--papel);border:1px solid var(--linha);border-radius:18px;padding:18px;margin-top:14px}
+.card .sub{font-size:14px;color:var(--cinza);margin:4px 0 0}
+
+/* Humor */
+.carinhas{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:14px}
+.carinha{background:none;border:1.5px solid transparent;border-radius:14px;padding:8px 2px 6px;display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11.5px;color:var(--cinza);transition:background .15s,border-color .15s}
+.carinha svg{width:44px;height:44px}
+.carinha[aria-pressed="true"]{background:var(--creme);border-color:var(--ocre);color:var(--vinho);font-weight:600}
+.carinha[aria-pressed="true"] .rosto{fill:var(--ocre);stroke:var(--ocre)}
+.carinha:hover .rosto{stroke:var(--ocre)}
+textarea,input[type=text],input[type=time]{width:100%;border:1px solid var(--linha);background:var(--creme);border-radius:12px;padding:11px 12px;resize:vertical}
+textarea{min-height:70px}
+.linha-acoes{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.btn{border:0;border-radius:999px;padding:11px 18px;font-weight:700;font-size:15px;background:var(--vinho);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.btn.sec{background:transparent;color:var(--vinho);border:1.5px solid var(--vinho)}
+.btn.peq{padding:7px 12px;font-size:13px}
+.salvo{font-size:13px;color:var(--vinho-claro);align-self:center}
+
+/* Gráfico */
+.seg{display:inline-flex;background:var(--creme);border:1px solid var(--linha);border-radius:999px;padding:3px}
+.seg button{border:0;background:none;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:600;color:var(--cinza)}
+.seg button[aria-pressed="true"]{background:var(--vinho);color:#fff}
+.cab-card{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.grafico{margin-top:14px;width:100%;height:auto;display:block}
+.resumo{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+.resumo div{background:var(--creme);border-radius:12px;padding:10px;text-align:center}
+.resumo b{display:block;font-family:var(--display);font-size:26px;font-weight:400;color:var(--vinho);line-height:1.1;font-variant-numeric:tabular-nums}
+.resumo span{font-size:12px;color:var(--cinza)}
+.historico{list-style:none;padding:0;margin:12px 0 0;display:grid;gap:6px}
+.historico li{display:flex;gap:10px;align-items:flex-start;font-size:14px;padding:8px 0;border-top:1px solid var(--linha)}
+.historico svg{width:24px;height:24px;flex:none}
+.historico .d{color:var(--cinza);font-size:12.5px;min-width:64px}
+
+/* Listas */
+.add{display:flex;gap:8px;margin-top:12px}
+.add input{flex:1}
+.add .btn{padding:0 16px;flex:none}
+.lista{list-style:none;padding:0;margin:12px 0 0}
+.item{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--linha)}
+.item:first-child{border-top:0}
+.check{flex:none;width:24px;height:24px;border-radius:7px;border:1.5px solid var(--vinho-claro);background:none;display:grid;place-items:center;margin-top:1px;padding:0}
+.check[aria-checked="true"]{background:var(--vinho);border-color:var(--vinho)}
+.check[aria-checked="true"]::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg) translate(-1px,-1px)}
+.item .txt{flex:1;min-width:0;overflow-wrap:anywhere}
+.item.feito .txt{color:var(--cinza);text-decoration:line-through}
+.item .meta-d{font-size:12px;color:var(--cinza)}
+.x{background:none;border:0;color:var(--cinza);font-size:20px;line-height:1;padding:2px 6px}
+.vazio{color:var(--cinza);font-size:14px;font-style:italic;margin:12px 0 0}
+.titulo-sec{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--cinza);font-weight:700;margin:18px 0 0}
+
+/* Metas */
+.meta{border-top:1px solid var(--linha);padding:14px 0}
+.meta:first-of-type{border-top:0}
+.meta-cab{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.meta-titulo{font-weight:700;overflow-wrap:anywhere}
+.barra{height:8px;background:var(--creme);border-radius:999px;overflow:hidden;margin:8px 0 4px;border:1px solid var(--linha)}
+.barra i{display:block;height:100%;background:var(--vinho-claro);border-radius:999px}
+.meta .pct{font-size:12px;color:var(--cinza)}
+.passos{list-style:none;padding:0;margin:8px 0 0 4px}
+.passos .item{padding:7px 0;border:0;font-size:14.5px}
+.passos .check{width:20px;height:20px;border-radius:6px}
+.add-passo{display:flex;gap:6px;margin-top:4px}
+.add-passo input{padding:7px 10px;font-size:14px}
+
+/* Mais */
+.opcao p{margin:6px 0 0;font-size:14px;color:var(--cinza)}
+.assinatura{margin:22px auto 0;font-size:11.5px;color:var(--cinza);text-align:center;line-height:1.6}
+
+/* Abas */
+nav.abas{position:fixed;left:0;right:0;bottom:0;background:var(--papel);border-top:1px solid var(--linha);padding:6px 8px calc(6px + env(safe-area-inset-bottom));z-index:5}
+nav.abas .in{max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(var(--n-abas,4),1fr)}
+nav.abas button{background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11.5px;font-weight:600;color:var(--cinza);padding:6px 0;border-radius:12px}
+nav.abas svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+nav.abas button[aria-current="page"]{color:var(--vinho)}
+nav.abas button[aria-current="page"] svg{stroke-width:2.2}
+[hidden]{display:none !important}
+
+/* Entrada (login de demonstração) */
+.entrada{position:fixed;inset:0;background:var(--creme);z-index:20;overflow-y:auto}
+.entrada .in{max-width:420px;margin:0 auto;padding:48px 22px 32px;min-height:100%;display:flex;flex-direction:column}
+.entrada h1{font-size:44px;margin-top:10px}
+.entrada .intro{color:var(--cinza);margin:12px 0 26px;font-size:15.5px}
+.entrada label{font-size:13px;font-weight:600;color:var(--tinta);display:block;margin:12px 0 6px}
+.entrada input[type=email],.entrada input[type=password]{width:100%;border:1px solid var(--linha);background:var(--papel);border-radius:12px;padding:12px}
+.btn-google{width:100%;justify-content:center;background:var(--papel);color:var(--tinta);border:1px solid var(--linha);font-weight:600}
+.btn-google svg{width:20px;height:20px}
+.ou{display:flex;align-items:center;gap:10px;color:var(--cinza);font-size:13px;margin:18px 0 4px}
+.ou::before,.ou::after{content:"";flex:1;height:1px;background:var(--linha)}
+.entrada .btn.cheio{width:100%;justify-content:center;margin-top:16px}
+.entrada .alt{font-size:14px;color:var(--cinza);text-align:center;margin-top:14px}
+.entrada .alt button{background:none;border:0;color:var(--vinho);font-weight:700;text-decoration:underline;padding:2px}
+.selo{margin-top:auto;padding-top:28px;font-size:12.5px;color:var(--cinza);text-align:center;line-height:1.6}
+.cadeado{display:flex;gap:10px;align-items:flex-start;background:var(--papel);border:1px solid var(--linha);border-radius:14px;padding:12px 14px;font-size:14px;margin-top:18px}
+.cadeado svg{flex:none;width:20px;height:20px;stroke:var(--vinho);fill:none;stroke-width:1.8;margin-top:1px}
+.termo{background:var(--papel);border:1px solid var(--linha);border-radius:14px;padding:14px;font-size:14px;max-height:230px;overflow-y:auto;margin-top:14px}
+.termo p{margin:0 0 10px}
+.aceite{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:14.5px}
+.aceite input{width:20px;height:20px;accent-color:var(--vinho);margin-top:2px;flex:none}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.tag-demo{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--rosa);color:var(--vinho);border-radius:999px;padding:3px 9px}
+
+.entrada input[type=text],.entrada input[type=number],.entrada input[type=time],.entrada select,#v-mais select,#v-mais input[type=number]{width:100%;border:1px solid var(--linha);background:var(--papel);border-radius:12px;padding:12px;font:inherit;color:inherit}
+.dupla{display:grid;grid-template-columns:1.3fr 1fr;gap:10px}
+.dica{font-size:12.5px;color:var(--cinza);margin-top:4px}
+
+/* Transição de abertura */
+.abertura{position:fixed;inset:0;background:var(--vinho);color:var(--creme);z-index:30;display:grid;place-items:center;text-align:center;padding:24px;transition:opacity .6s ease}
+.abertura .estrela-g{font-size:34px;color:var(--rosa);display:block;animation:gira 1.4s ease}
+.abertura h2{color:var(--creme);font-size:40px;margin-top:10px}
+.abertura p{color:var(--rosa);margin:6px 0 0}
+.abertura.sai{opacity:0}
+@keyframes gira{from{transform:rotate(-90deg) scale(.6);opacity:0}to{transform:none;opacity:1}}
+
+/* Explicações */
+details.porque{background:var(--rosa);border-radius:16px;padding:12px 16px;margin-top:14px}
+details.porque summary{cursor:pointer;font-weight:700;color:var(--vinho);font-size:14.5px;list-style:none;display:flex;justify-content:space-between;gap:10px}
+details.porque summary::-webkit-details-marker{display:none}
+details.porque summary::after{content:"+";font-size:18px;line-height:1}
+details.porque[open] summary::after{content:"–"}
+details.porque p{margin:8px 0 0;font-size:14.5px;line-height:1.55}
+.proxima{display:flex;align-items:center;gap:12px;background:var(--papel);border:1px solid var(--linha);border-radius:16px;padding:12px 14px;margin-top:14px}
+.proxima .dia{font-family:var(--display);font-size:30px;color:var(--vinho);line-height:1;min-width:46px;text-align:center}
+.proxima .info{font-size:14px}
+.proxima .info b{display:block;font-size:15px}
+
+.par{display:flex;gap:12px;align-items:center;background:var(--papel);border:1px solid var(--linha);border-radius:18px;padding:14px 16px;margin-top:14px;font-size:13.5px;color:var(--cinza)}
+.par b{display:block;color:var(--vinho);font-size:15.5px;font-weight:600}
+.avatares{display:flex;flex:none}
+.avatares span{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:600;color:var(--creme);background:var(--vinho-claro);border:2px solid var(--papel)}
+.avatares span+span{margin-left:-10px;background:var(--ocre)}
+.status{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.status button{border:1px solid var(--linha);background:var(--creme);border-radius:999px;padding:5px 10px;font-size:12.5px;font-weight:500;color:var(--cinza)}
+.status button[aria-pressed="true"][data-s="ok"]{background:#E3EAD9;border-color:#9CB283;color:#3E5A2A}
+.status button[aria-pressed="true"][data-s="meio"]{background:#F3E2C6;border-color:var(--ocre);color:#7A4E1F}
+.status button[aria-pressed="true"][data-s="conversar"]{background:#F1D6CC;border-color:var(--vinho-claro);color:var(--vinho-claro)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chips button{border:1.5px solid var(--linha);background:var(--papel);border-radius:999px;padding:9px 16px;font-weight:500;color:var(--tinta)}
+.chips button[aria-checked="true"]{background:var(--vinho);border-color:var(--vinho);color:var(--creme)}
+.reais{display:flex;align-items:center;border:1px solid var(--linha);background:var(--papel);border-radius:12px;padding-left:12px}
+.reais span{color:var(--cinza);font-size:14px}
+.reais input{border:0 !important;background:transparent !important;width:100%;padding:12px 10px;min-width:0}
+#v-mais .reais{background:var(--creme)}
+.proxima.pag{margin-top:8px}
+.form-comb select{flex:1;border:1px solid var(--linha);background:var(--creme);border-radius:12px;padding:11px 12px;font:inherit;color:inherit}
+.resumo-semana{margin-top:14px;font-size:14px;color:var(--cinza)}
+.resumo-semana b{color:var(--vinho);font-weight:600}
+.comb{list-style:none;border-top:1px solid var(--linha);padding:14px 0}
+.comb:first-child{border-top:0}
+.comb.ok .barra i{background:#7F9A63}
+.semana{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:10px}
+.semana button{aspect-ratio:1;max-width:40px;width:100%;justify-self:center;border-radius:50%;border:1.5px solid var(--linha);background:var(--creme);font-size:13px;font-weight:600;color:var(--cinza);padding:0}
+.semana button.hj{border-color:var(--ocre)}
+.semana button[aria-pressed="true"]{background:var(--vinho-claro);border-color:var(--vinho-claro);color:#fff}
+.semana button:disabled{opacity:.35;cursor:default}
+.menu-btn{margin-left:auto;background:rgba(242,234,224,.1);border:1px solid rgba(242,234,224,.2);border-radius:12px;width:40px;height:40px;display:grid;place-items:center;padding:0}
+.menu-btn svg{width:22px;height:22px;stroke:var(--creme);fill:none;stroke-width:1.8;stroke-linecap:round}
+header.top .data-hoje{text-align:left;margin-top:14px;font-size:12.5px;letter-spacing:.06em;text-transform:uppercase}
+header.top h1{margin-top:4px}
+.menu-fundo{position:fixed;inset:0;background:rgba(44,18,22,.45);z-index:12}
+.menu{position:fixed;top:0;right:0;bottom:0;width:min(86vw,360px);background:var(--creme);z-index:13;padding:20px 18px 24px;display:flex;flex-direction:column;box-shadow:-10px 0 30px rgba(44,18,22,.2);overflow-y:auto}
+.menu-cab{display:flex;justify-content:space-between;align-items:center}
+.menu-lista{display:grid;gap:8px;margin-top:22px}
+.menu-lista button{text-align:left;background:var(--papel);border:1px solid var(--linha);border-radius:16px;padding:14px 16px}
+.menu-lista b{display:block;font-family:var(--display);font-weight:400;font-size:20px;color:var(--vinho)}
+.menu-lista span{font-size:13.5px;color:var(--cinza)}
+.bloco-lista{display:grid;gap:10px;margin-top:16px}
+.nota{background:var(--creme);border:1px solid var(--linha);border-radius:14px;padding:14px}
+.nota h3{font-family:var(--display);font-weight:400;font-size:19px;margin:0;color:var(--vinho)}
+.nota .quando{font-size:12px;color:var(--cinza);margin-top:2px}
+.nota .corpo{margin-top:8px;font-size:15px;white-space:pre-wrap;overflow-wrap:anywhere}
+.nota .corpo.curto{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.nota .acoes{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.nota .acoes button{background:none;border:1px solid var(--linha);border-radius:999px;padding:5px 11px;font-size:12.5px;font-weight:500;color:var(--vinho)}
+.erro{color:#A8472C;font-size:14px;margin:10px 0 0;text-align:center}
+.codigo{font-family:var(--display);font-size:40px;letter-spacing:.18em;color:var(--vinho);background:var(--creme);border:1px dashed var(--ocre);border-radius:14px;text-align:center;padding:10px;margin-top:8px}
+.toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);background:var(--tinta);color:#fff;padding:9px 16px;border-radius:999px;font-size:14px;z-index:9;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<!-- ENTRADA: demonstração, ainda sem login real -->
+<div class="entrada" id="entrada">
+  <!-- Passo 1: entrar -->
+  <div class="in" id="passoCarregando" style="justify-content:center;align-items:center;text-align:center">
+    <p style="color:var(--cinza)">Abrindo seu diário…</p>
+  </div>
+  <div class="in" id="passoEntrar" hidden>
+    <div class="logo escuro" style="margin-top:22px"><svg class="logo-svg" style="width:46px;height:46px" viewBox="0 0 40 40" aria-hidden="true"><rect x="7" y="8" width="24" height="29" rx="3.5" fill="#F2EAE0" stroke="#D9C6B2" stroke-width="1"/><path d="M10.5 8h1.5v29h-1.5A3.5 3.5 0 0 1 7 33.5v-22A3.5 3.5 0 0 1 10.5 8z" fill="#C28A5A"/><path d="M15 21q1.8-2.4 3.6 0M22.4 21q1.8-2.4 3.6 0" fill="none" stroke="#2C1216" stroke-width="1.8" stroke-linecap="round"/><path d="M15.6 26q4.9 4 9.8 0" fill="none" stroke="#2C1216" stroke-width="1.8" stroke-linecap="round"/><path d="M34 2c.45 3.8 1.7 5.05 5.5 5.5-3.8.45-5.05 1.7-5.5 5.5-.45-3.8-1.7-5.05-5.5-5.5 3.8-.45 5.05-1.7 5.5-5.5z" fill="#C28A5A"/></svg></div>
+    <h1>Meu diário <em>da terapia</em></h1>
+    <p class="por">Stefane Rodrigues · Psicóloga · CRP 05/73756</p>
+    <p class="intro">Um espaço pra registrar como você está, anotar o que quer levar pra sessão e acompanhar suas metas.</p>
+
+    <button class="btn btn-google" id="entrarGoogle" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.5 12.3c0-.8-.1-1.5-.2-2.2H12v4.2h5.9c-.3 1.4-1 2.5-2.2 3.3v2.7h3.6c2-1.9 3.2-4.7 3.2-8z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.6-2.7c-1 .7-2.2 1.1-3.7 1.1-2.9 0-5.3-1.9-6.2-4.5H2.1v2.8C3.9 20.6 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.8 14.2c-.2-.7-.4-1.4-.4-2.2s.1-1.5.4-2.2V7H2.1C1.4 8.5 1 10.2 1 12s.4 3.5 1.1 5l3.7-2.8z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3.1.6 4.2 1.7l3.2-3.2C17.5 2.1 15 1 12 1 7.7 1 3.9 3.4 2.1 7l3.7 2.8c.9-2.6 3.3-4.4 6.2-4.4z"/></svg>
+      Entrar com Google
+    </button>
+
+    <div class="ou">ou com e-mail</div>
+    <form id="formEntrar">
+      <label for="email">E-mail</label>
+      <input type="email" id="email" placeholder="seuemail@exemplo.com" autocomplete="email">
+      <label for="senha">Senha</label>
+      <input type="password" id="senha" placeholder="Sua senha" autocomplete="current-password">
+      <button class="btn cheio" type="submit" id="botaoEntrar">Entrar</button>
+    </form>
+    <p class="erro" id="erroEntrar" role="alert" hidden></p>
+    <p class="alt"><span id="textoAlt">Primeira vez aqui?</span> <button type="button" id="trocarModo">Criar minha conta</button></p>
+    <p class="alt" style="margin-top:4px"><button type="button" id="esqueci">Esqueci minha senha</button></p>
+
+    <div class="cadeado">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+      <span>O que você escreve aqui é seu. Só você acessa, e você escolhe o que compartilhar com a sua psicóloga.</span>
+    </div>
+    <p class="selo">Stefane Rodrigues · Psicóloga clínica<br>Mestre em Psicologia Social · CRP 05/73756</p>
+  </div>
+
+  <!-- Passo 2: consentimento (só no primeiro acesso) -->
+  <div class="in" id="passoTermo" hidden>
+    <div><span class="tag-demo">Primeiro acesso</span></div>
+    <h1 style="margin-top:18px">Antes de <em>começar</em></h1>
+    <p class="intro" style="margin-bottom:0">Leia como seus dados são cuidados. Você pode apagar tudo quando quiser.</p>
+    <div class="termo" tabindex="0" aria-label="Termo de consentimento">
+      <p><b>Termo de consentimento (texto provisório)</b></p>
+      <p>Este diário é uma ferramenta de apoio ao seu processo terapêutico com a psicóloga Stefane Rodrigues (CRP 05/73756). Ele não substitui as sessões nem atendimento de urgência.</p>
+      <p>Os registros de humor, anotações e metas ficam guardados na sua conta, protegidos por login. Ninguém além de você tem acesso a eles, a menos que você mesmo decida enviar.</p>
+      <p>Seus dados ficam armazenados em servidores do Google (Firebase) localizados no Brasil, em São Paulo, de acordo com a Lei Geral de Proteção de Dados (LGPD).</p>
+      <p>Você pode apagar todos os seus dados a qualquer momento, na aba Mais.</p>
+      <p>Em caso de crise ou risco, procure o CVV (ligue 188) ou o serviço de emergência mais próximo.</p>
+    </div>
+    <label class="aceite"><input type="checkbox" id="aceito"> <span>Li e concordo com o termo de consentimento.</span></label>
+    <button class="btn cheio" id="comecar" type="button" disabled style="width:100%;justify-content:center;margin-top:16px">Continuar</button>
+  </div>
+
+  <!-- Passo 3: cadastro breve -->
+  <div class="in" id="passoCadastro" hidden>
+    <div><span class="tag-demo">Quase lá</span></div>
+    <h1 style="margin-top:18px">Como posso <em>te chamar?</em></h1>
+    <p class="intro" style="margin-bottom:6px">Só umas informações rápidas pra deixar o diário com a sua cara.</p>
+    <form id="formCadastro">
+      <label for="cApelido">Como você gostaria de ser chamado(a)?</label>
+      <input type="text" id="cApelido" placeholder="Ex.: Ste" autocomplete="nickname" required>
+      <label for="cNome">Nome completo</label>
+      <input type="text" id="cNome" placeholder="Seu nome" autocomplete="name">
+      <label for="cIdade">Idade</label>
+      <input type="number" id="cIdade" min="12" max="110" inputmode="numeric" placeholder="Ex.: 32" style="max-width:130px">
+      <label>Dia da sua sessão de terapia</label>
+      <div class="dupla">
+        <select id="cDia" aria-label="Dia da semana da sessão"></select>
+        <input type="time" id="cHora" value="19:00" aria-label="Horário da sessão">
+      </div>
+      <p class="dica">Usamos isso pra te lembrar de olhar suas anotações antes da sessão.</p>
+      <label>Que terapia você faz?</label>
+      <div class="chips" id="cTipo" role="radiogroup" aria-label="Tipo de terapia">
+        <button type="button" role="radio" data-tipo="individual" aria-checked="true">Individual</button>
+        <button type="button" role="radio" data-tipo="casal" aria-checked="false">De casal</button>
+        <button type="button" role="radio" data-tipo="ambos" aria-checked="false">As duas</button>
+      </div>
+      <div id="cParBox" hidden>
+        <label for="cPar">Qual o nome do seu amor?</label>
+        <input type="text" id="cPar" placeholder="Ex.: Lucas">
+        <p class="dica">Depois, na aba Casal, vocês conectam as contas com um código. Os combinados e metas do casal ficam visíveis pros dois.</p>
+      </div>
+      <label for="cValor">Valor da terapia <span style="font-weight:400;color:var(--cinza)">(opcional)</span></label>
+      <div class="dupla">
+        <div class="reais"><span>R$</span><input type="number" id="cValor" min="0" step="0.01" inputmode="decimal" placeholder="250"></div>
+        <select id="cPagTipo" aria-label="Como você paga"><option value="sessao">por sessão</option><option value="mensal">por mês</option></select>
+      </div>
+      <div id="cPagDiaBox" hidden>
+        <label for="cPagDia">Dia do pagamento</label>
+        <input type="number" id="cPagDia" min="1" max="31" inputmode="numeric" placeholder="Ex.: 5" style="max-width:130px">
+      </div>
+      <p class="dica">Só pra te lembrar do pagamento. Ninguém além de você vê esse valor aqui.</p>
+      <button class="btn cheio" type="submit">Abrir meu diário</button>
+    </form>
+  </div>
+</div>
+
+<div class="abertura" id="abertura" hidden>
+  <div>
+    <span class="estrela-g"><svg style="width:72px;height:72px" viewBox="0 0 40 40" aria-hidden="true"><rect x="7" y="8" width="24" height="29" rx="3.5" fill="#F2EAE0" stroke="#D9C6B2" stroke-width="1"/><path d="M10.5 8h1.5v29h-1.5A3.5 3.5 0 0 1 7 33.5v-22A3.5 3.5 0 0 1 10.5 8z" fill="#C28A5A"/><path d="M15 21q1.8-2.4 3.6 0M22.4 21q1.8-2.4 3.6 0" fill="none" stroke="#2C1216" stroke-width="1.8" stroke-linecap="round"/><path d="M15.6 26q4.9 4 9.8 0" fill="none" stroke="#2C1216" stroke-width="1.8" stroke-linecap="round"/><path d="M34 2c.45 3.8 1.7 5.05 5.5 5.5-3.8.45-5.05 1.7-5.5 5.5-.45-3.8-1.7-5.05-5.5-5.5 3.8-.45 5.05-1.7 5.5-5.5z" fill="#F2EAE0"/></svg></span>
+    <h2 id="aberturaTitulo">Prontinho</h2>
+    <p>Seu diário está pronto.</p>
+  </div>
+</div>
+
+<div class="app">
+  <header class="top">
+    <div class="topo-linha">
+      <div class="logo"><svg class="logo-svg" viewBox="0 0 40 40" aria-hidden="true"><rect x="7" y="8" width="24" height="29" rx="3.5" fill="#F2EAE0" stroke="#D9C6B2" stroke-width="1"/><path d="M10.5 8h1.5v29h-1.5A3.5 3.5 0 0 1 7 33.5v-22A3.5 3.5 0 0 1 10.5 8z" fill="#C28A5A"/><path d="M15 21q1.8-2.4 3.6 0M22.4 21q1.8-2.4 3.6 0" fill="none" stroke="#2C1216" stroke-width="1.8" stroke-linecap="round"/><path d="M15.6 26q4.9 4 9.8 0" fill="none" stroke="#2C1216" stroke-width="1.8" stroke-linecap="round"/><path d="M34 2c.45 3.8 1.7 5.05 5.5 5.5-3.8.45-5.05 1.7-5.5 5.5-.45-3.8-1.7-5.05-5.5-5.5 3.8-.45 5.05-1.7 5.5-5.5z" fill="#F2EAE0"/></svg><span>Meu diário <em>da terapia</em></span></div>
+      <button class="menu-btn" id="abrirMenu" type="button" aria-label="Abrir menu" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+    </div>
+    <div class="data-hoje" id="dataHoje"></div>
+    <h1 id="titulo">Oi!</h1>
+    <p class="saud-sub" id="subtitulo">Como você está se sentindo hoje?</p>
+  </header>
+
+  <div class="aviso-demo" id="avisoDemo" hidden style="display:none">
+    <span>Você está vendo exemplos para conhecer o diário.</span>
+    <button id="limparDemo">Começar do zero</button>
+  </div>
+
+  <!-- HOJE -->
+  <section id="v-hoje" data-view>
+    <div class="card">
+      <h2>Escolha a carinha do seu dia</h2>
+      <p class="sub">Não existe resposta certa. Vale o que você está sentindo agora.</p>
+      <div class="carinhas" id="carinhas" role="group" aria-label="Escolha seu humor"></div>
+      <label for="notaHumor" class="titulo-sec" style="display:block">Quer contar algo sobre o dia? (opcional)</label>
+      <textarea id="notaHumor" placeholder="O que aconteceu, o que você sentiu…" style="margin-top:8px"></textarea>
+      <div class="linha-acoes">
+        <button class="btn" id="salvarHumor">Salvar meu dia</button>
+        <span class="salvo" id="statusHumor"></span>
+      </div>
+    </div>
+    <details class="porque" data-porque="hoje" open>
+      <summary>Por que registrar o humor todo dia?</summary>
+      <p>Na correria, um dia difícil pode parecer uma semana inteira difícil. O registro mostra o que de fato aconteceu. Com o tempo, aparecem padrões que passam despercebidos, como dias da semana mais pesados ou situações que sempre mexem com você.</p>
+      <p>Não precisa ser perfeito. Uma carinha por dia já basta. E se quiser, uma frase sobre o que aconteceu ajuda muito a lembrar depois. Tudo isso vira material pra gente conversar na sessão.</p>
+    </details>
+
+    <div class="card">
+      <div class="cab-card">
+        <h2>Seu humor ao longo do tempo</h2>
+        <div class="seg" role="group" aria-label="Período">
+          <button data-periodo="7">7 dias</button>
+          <button data-periodo="30" aria-pressed="true">30 dias</button>
+        </div>
+      </div>
+      <svg class="grafico" id="grafico" viewBox="0 0 340 170" role="img" aria-label="Gráfico do humor"></svg>
+      <div class="resumo" id="resumo"></div>
+      <p class="titulo-sec">Últimos registros</p>
+      <ul class="historico" id="historico"></ul>
+    </div>
+  </section>
+
+  <!-- SESSÃO -->
+  <section id="v-sessao" data-view hidden>
+    <details class="porque" data-porque="sessao" open>
+      <summary>Por que anotar entre as sessões?</summary>
+      <p>Muita coisa importante acontece entre uma sessão e outra. Uma conversa que mexeu com você. Um pensamento que voltou várias vezes. Um sonho. Só que, quando chega a hora da sessão, é comum dar branco.</p>
+      <p>Anotar no momento em que você lembra garante que nada se perca. Não precisa escrever bonito nem completo. Uma palavra já serve pra puxar o assunto. E o que ficou registrado aqui ajuda você a chegar na sessão mais perto do que realmente importa.</p>
+    </details>
+    <div class="card">
+      <h2>Pra levar pra sessão</h2>
+      <p class="sub">Lembrou de algo que quer falar? Anota aqui na hora. Na sessão, é só abrir e marcar o que já conversou.</p>
+      <div class="proxima" id="proxima"></div>
+      <div class="proxima pag" id="proxPag" hidden></div>
+      <form class="add" id="formNota">
+        <input type="text" id="novaNota" placeholder="Ex.: a conversa com minha mãe no domingo" aria-label="Nova anotação">
+        <button class="btn" type="submit">Anotar</button>
+      </form>
+      <p class="titulo-sec">Ainda pra falar</p>
+      <ul class="lista" id="notasPendentes"></ul>
+      <div class="linha-acoes" style="margin-top:14px">
+        <a class="btn sec peq" id="enviarNotas" href="#" target="_blank" rel="noopener">Enviar pra minha psicóloga</a>
+        <button class="btn sec peq" id="copiarNotas" type="button">Copiar lista</button>
+      </div>
+      <p class="titulo-sec">Já conversado</p>
+      <ul class="lista" id="notasFeitas"></ul>
+    </div>
+
+    <div class="card">
+      <h2>Bloco de notas</h2>
+      <p class="sub">Sabe quando você chega na sessão e esquece tudo? Aqui você escreve a ideia com calma, do seu jeito, pra desenvolver depois. Fica tudo salvo na sua conta.</p>
+      <form id="formBloco" class="bloco-form">
+        <input type="text" id="blocoTitulo" placeholder="Título (opcional)" aria-label="Título da nota">
+        <textarea id="blocoTexto" placeholder="Escreva o que está passando pela sua cabeça…" aria-label="Texto da nota" style="min-height:120px;margin-top:8px"></textarea>
+        <div class="linha-acoes">
+          <button class="btn" type="submit" id="blocoSalvar">Salvar nota</button>
+          <button class="btn sec peq" type="button" id="blocoCancelar" hidden>Cancelar edição</button>
+        </div>
+      </form>
+      <div id="bloco" class="bloco-lista"></div>
+    </div>
+  </section>
+
+  <!-- METAS -->
+  <section id="v-metas" data-view hidden>
+    <details class="porque" data-porque="metas" open>
+      <summary>Pra que servem as metas?</summary>
+      <p>As metas lembram pra onde você quer ir com a terapia. Elas nascem das nossas conversas e podem mudar ao longo do caminho, porque você também muda.</p>
+      <p>Uma meta grande pode parecer distante. Por isso vale quebrar em pequenos passos, coisas possíveis de fazer na semana. Cada passo marcado mostra que você está saindo do lugar, mesmo nos dias em que parece que não. Se travar em algum, leva pra sessão. Isso também é parte do processo.</p>
+    </details>
+    <div class="card">
+      <h2>Suas metas</h2>
+      <p class="sub">O que você quer construir com a terapia e os pequenos passos até lá.</p>
+      <form class="add" id="formMeta">
+        <input type="text" id="novaMeta" placeholder="Ex.: conseguir dizer não sem culpa" aria-label="Nova meta">
+        <button class="btn" type="submit">Criar</button>
+      </form>
+      <div id="metas" style="margin-top:8px"></div>
+    </div>
+  </section>
+
+  <!-- CASAL -->
+  <section id="v-casal" data-view hidden>
+    <div class="par">
+      <div class="avatares"><span>S</span><span>L</span></div>
+      <div><b id="parTitulo">Você e seu amor</b><span id="parTexto">Combinados e metas desta aba aparecem pros dois. Seu humor e suas anotações continuam só seus.</span></div>
+    </div>
+    <div class="card" id="conectarCard">
+      <h2>Conectar com seu amor</h2>
+      <p class="sub">Pra vocês verem os mesmos combinados e metas, as contas precisam estar conectadas. Um de vocês cria o convite e o outro digita o código no próprio celular.</p>
+      <div id="semConvite">
+        <div class="linha-acoes"><button class="btn" id="criarConvite" type="button">Criar convite</button></div>
+        <p class="titulo-sec">Recebeu um código?</p>
+        <form class="add" id="formEntrarCasal">
+          <input type="text" id="codigoCasal" placeholder="Digite o código" maxlength="6" autocapitalize="characters" autocomplete="off" aria-label="Código do convite" style="text-transform:uppercase;letter-spacing:.2em">
+          <button class="btn sec" type="submit">Conectar</button>
+        </form>
+        <p class="erro" id="erroCasal" role="alert" hidden></p>
+      </div>
+      <div id="comConvite" hidden>
+        <p class="titulo-sec">Seu código</p>
+        <div class="codigo" id="codigoMostrado"></div>
+        <p class="sub" style="margin-top:8px">Manda esse código pro seu amor. Quando ele(a) entrar no diário e digitar o código na aba Casal, vocês ficam conectados.</p>
+        <div class="linha-acoes"><a class="btn" id="enviarCodigo" href="#" target="_blank" rel="noopener">Enviar pelo WhatsApp</a><button class="btn sec peq" id="copiarCodigo" type="button">Copiar código</button></div>
+      </div>
+    </div>
+    <div class="card">
+      <h2>Combinados do casal</h2>
+      <p class="sub">Acordos que vocês construíram juntos. Defina quantas vezes na semana cada um precisa acontecer e marque o dia em que aconteceu.</p>
+      <form id="formComb" class="form-comb">
+        <input type="text" id="novoComb" placeholder="Ex.: lavar a louça do jantar" aria-label="Novo combinado">
+        <div class="linha-acoes" style="margin-top:8px">
+          <select id="vezesComb" aria-label="Quantas vezes por semana"></select>
+          <button class="btn" type="submit">Combinar</button>
+        </div>
+      </form>
+      <div class="resumo-semana" id="resumoComb"></div>
+      <ul class="lista" id="combinados"></ul>
+    </div>
+    <details class="porque" data-porque="casal" open>
+      <summary>Por que registrar os combinados?</summary>
+      <p>Muita coisa boa é combinada na sessão e depois se perde na rotina. Ter os combinados à vista ajuda a transformar conversa em prática no dia a dia.</p>
+      <p>Marcar como cada combinado está indo não é pra apontar quem errou. É pra vocês enxergarem juntos o que está funcionando e o que precisa de ajuste. O que não estiver indo bem vira assunto pra próxima sessão.</p>
+    </details>
+    <div class="card">
+      <h2>Metas do casal</h2>
+      <p class="sub">Onde vocês querem chegar juntos e os pequenos passos até lá.</p>
+      <form class="add" id="formMetaCasal">
+        <input type="text" id="novaMetaCasal" placeholder="Ex.: ter um tempo só nosso toda semana" aria-label="Nova meta do casal">
+        <button class="btn" type="submit">Criar</button>
+      </form>
+      <div id="metasCasal" style="margin-top:8px"></div>
+    </div>
+  </section>
+
+  <!-- MAIS -->
+  <section id="v-mais" data-view hidden>
+    <details class="porque" data-porque="mais" open>
+      <summary>Por que criar lembretes?</summary>
+      <p>Criar o hábito leva um tempo, e é normal esquecer nos primeiros dias. O lembrete ajuda até o registro virar parte da rotina. Escolha um horário em que você costuma estar mais tranquilo(a), como, por exemplo, antes de dormir.</p>
+    </details>
+    <div class="card opcao">
+      <h2>Seus dados de cadastro</h2>
+      <form id="formPerfil">
+        <label for="pApelido" class="titulo-sec" style="display:block">Como prefere ser chamado(a)</label>
+        <input type="text" id="pApelido" style="margin-top:8px">
+        <label class="titulo-sec" style="display:block">Dia e horário da sessão</label>
+        <div class="dupla" style="margin-top:8px">
+          <select id="pDia" aria-label="Dia da sessão"></select>
+          <input type="time" id="pHora" aria-label="Horário da sessão">
+        </div>
+        <label class="titulo-sec" style="display:block">Que terapia você faz</label>
+        <div class="chips" id="pTipo" role="radiogroup" aria-label="Tipo de terapia" style="margin-top:8px">
+          <button type="button" role="radio" data-tipo="individual">Individual</button>
+          <button type="button" role="radio" data-tipo="casal">De casal</button>
+          <button type="button" role="radio" data-tipo="ambos">As duas</button>
+        </div>
+        <div id="pParBox"><label for="pPar" class="titulo-sec" style="display:block">Nome do seu amor</label><input type="text" id="pPar" style="margin-top:8px"></div>
+        <label class="titulo-sec" style="display:block">Valor e pagamento</label>
+        <div class="dupla" style="margin-top:8px">
+          <div class="reais"><span>R$</span><input type="number" id="pValor" min="0" step="0.01" inputmode="decimal" placeholder="250"></div>
+          <select id="pPagTipo" aria-label="Como você paga"><option value="sessao">por sessão</option><option value="mensal">por mês</option></select>
+        </div>
+        <div id="pPagDiaBox" hidden><label for="pPagDia" class="titulo-sec" style="display:block">Dia do pagamento</label><input type="number" id="pPagDia" min="1" max="31" style="margin-top:8px;max-width:130px"></div>
+        <div class="linha-acoes"><button class="btn sec peq" type="submit">Salvar alterações</button></div>
+      </form>
+    </div>
+    <div class="card opcao">
+      <h2>Lembrete da sessão</h2>
+      <p id="textoLembreteSessao">Toda semana, uma hora antes da sessão, um aviso pra você olhar suas anotações.</p>
+      <div class="linha-acoes"><a class="btn" id="linkSessao" href="#" target="_blank" rel="noopener">Criar lembrete da sessão</a></div>
+    </div>
+    <div class="card opcao" id="cardPag">
+      <h2>Lembrete do pagamento</h2>
+      <p id="textoPag">Um aviso na agenda pra você não esquecer do pagamento.</p>
+      <div class="linha-acoes"><a class="btn" id="linkPag" href="#" target="_blank" rel="noopener">Criar lembrete de pagamento</a></div>
+    </div>
+    <div class="card opcao">
+      <h2>Lembrete diário</h2>
+      <p>Escolha um horário. O lembrete vai pra agenda do seu celular e se repete todo dia.</p>
+      <label for="horaLembrete" class="titulo-sec" style="display:block">Horário</label>
+      <input type="time" id="horaLembrete" value="21:00" style="margin-top:8px;max-width:160px">
+      <div class="linha-acoes"><a class="btn" id="linkLembrete" href="#" target="_blank" rel="noopener">Criar lembrete na agenda</a></div>
+    </div>
+    <div class="card opcao">
+      <h2>Seus dados</h2>
+      <p>Tudo o que você registra fica guardado na sua conta, protegido por login. Só você tem acesso, e você pode entrar de qualquer celular.</p>
+      <div class="linha-acoes">
+        <button class="btn sec peq" id="copiarBackup" type="button">Copiar backup</button>
+        <button class="btn sec peq" id="apagarTudo" type="button">Apagar tudo</button>
+      </div>
+      <div id="confirmaApagar" hidden style="margin-top:10px;font-size:14px">
+        Tem certeza? Isso apaga humor, anotações e metas.
+        <div class="linha-acoes"><button class="btn peq" id="simApagar" type="button">Sim, apagar</button><button class="btn sec peq" id="naoApagar" type="button">Cancelar</button></div>
+      </div>
+    </div>
+    <div class="card opcao">
+      <h2>Sua conta</h2>
+      <p id="contaEmail">Conectado como paciente@exemplo.com</p>
+      <div class="linha-acoes"><button class="btn sec peq" id="sair" type="button">Sair</button><button class="btn sec peq" id="excluirConta" type="button">Excluir minha conta</button></div>
+      <div id="confirmaExcluir" hidden style="margin-top:10px;font-size:14px">
+        Isso apaga sua conta e todos os seus registros, pra sempre. Não dá pra desfazer.
+        <div class="linha-acoes"><button class="btn peq" id="simExcluir" type="button">Sim, excluir</button><button class="btn sec peq" id="naoExcluir" type="button">Cancelar</button></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<footer class="assinatura app" style="padding-bottom:100px;min-height:0">Stefane Rodrigues · Psicóloga clínica · Mestre em Psicologia Social<br>Terapeuta de casais e família · CRP 05/73756<br>Este diário apoia a terapia e não substitui o atendimento.</footer>
+<nav class="abas" aria-label="Seções">
+  <div class="in">
+    <button data-go="hoje" aria-current="page"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8.5 14.5c1 1.2 2.2 1.8 3.5 1.8s2.5-.6 3.5-1.8"/><path d="M9 9.5h.01M15 9.5h.01"/></svg>Hoje</button>
+    <button data-go="sessao"><svg viewBox="0 0 24 24"><path d="M5 4h11l3 3v13H5z"/><path d="M9 10h6M9 14h6M9 18h3"/></svg>Sessão</button>
+    <button data-go="metas"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></svg>Metas</button>
+    <button data-go="casal" id="abaCasal" hidden><svg viewBox="0 0 24 24"><circle cx="8.5" cy="8" r="3"/><circle cx="15.5" cy="8" r="3"/><path d="M3 19c0-3 2.5-5 5.5-5 1.4 0 2.6.4 3.5 1.1.9-.7 2.1-1.1 3.5-1.1 3 0 5.5 2 5.5 5"/></svg>Casal</button>
+    <button data-go="mais"><svg viewBox="0 0 24 24"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>Mais</button>
+  </div>
+</nav>
+<div class="menu-fundo" id="menuFundo" hidden></div>
+<div class="menu" id="menu" hidden role="dialog" aria-label="Menu">
+  <div class="menu-cab"><div class="logo escuro"><svg class="logo-svg" viewBox="0 0 40 40" aria-hidden="true"><rect x="7" y="8" width="24" height="29" rx="3.5" fill="#F2EAE0" stroke="#D9C6B2" stroke-width="1"/><path d="M10.5 8h1.5v29h-1.5A3.5 3.5 0 0 1 7 33.5v-22A3.5 3.5 0 0 1 10.5 8z" fill="#C28A5A"/><path d="M15 21q1.8-2.4 3.6 0M22.4 21q1.8-2.4 3.6 0" fill="none" stroke="#2C1216" stroke-width="1.8" stroke-linecap="round"/><path d="M15.6 26q4.9 4 9.8 0" fill="none" stroke="#2C1216" stroke-width="1.8" stroke-linecap="round"/><path d="M34 2c.45 3.8 1.7 5.05 5.5 5.5-3.8.45-5.05 1.7-5.5 5.5-.45-3.8-1.7-5.05-5.5-5.5 3.8-.45 5.05-1.7 5.5-5.5z" fill="#C28A5A"/></svg><span>Meu diário <em>da terapia</em></span></div><button class="x" id="fecharMenu" aria-label="Fechar menu" style="font-size:26px">×</button></div>
+  <nav class="menu-lista">
+    <button data-menu="hoje"><b>Meu dia</b><span>Humor de hoje e gráfico</span></button>
+    <button data-menu="sessao"><b>Pra sessão</b><span>O que quero levar pra conversa</span></button>
+    <button data-menu="metas"><b>Minhas metas</b><span>Objetivos e pequenos passos</span></button>
+    <button data-menu="casal" id="menuCasal"><b>Casal</b><span>Combinados e metas de vocês</span></button>
+    <button data-menu="mais"><b>Lembretes e cadastro</b><span>Sessão, pagamento e seus dados</span></button>
+  </nav>
+  <p class="assinatura" style="margin-top:auto">Stefane Rodrigues · Psicóloga · CRP 05/73756</p>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js"></script>
+<script>
+/* ---------- Firebase ----------
+   Configuração pública do projeto (não é senha). Quem protege os dados são as regras do Firestore. */
+const firebaseConfig = {
+  apiKey: "AIzaSyBvJQgftMocMv7FG8Rt9erAv6CTMLG-aEQ",
+  authDomain: "meu-diario-terapia.firebaseapp.com",
+  projectId: "meu-diario-terapia",
+  storageBucket: "meu-diario-terapia.firebasestorage.app",
+  messagingSenderId: "752666675017",
+  appId: "1:752666675017:web:a6d23dfd7d2cbda63abc98"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+auth.languageCode = "pt";
+const db = firebase.firestore();
+db.settings({ignoreUndefinedProperties:true, merge:true});
+db.enablePersistence({synchronizeTabs:true}).catch(()=>{});
+const FV = firebase.firestore.FieldValue;
+const CHAVE = "diario-terapia-v1";
+
+let uid = null, coupleId = null, casalInfo = null, pararCasal = null, tSalvar = null;
+const novoD = () => ({humor:{}, notas:[], metas:[], bloco:[], casal:{par:"", combinados:[], metas:[]}});
+
+function salvar(){ if(!uid) return; clearTimeout(tSalvar); tSalvar = setTimeout(gravar, 600); }
+async function gravar(){
+  if(!uid) return;
+  clearTimeout(tSalvar);
+  const {casal, ...diario} = D;
+  const doc = {diario, perfil:P, atualizado: FV.serverTimestamp()};
+  if(!coupleId) doc.casalLocal = casal;
+  try{
+    await db.collection("users").doc(uid).set(doc);
+    if(coupleId && casalInfo) await db.collection("couples").doc(coupleId).update({combinados:casal.combinados, metas:casal.metas});
+  }catch(e){ console.error(e); toast("Não consegui salvar agora. Confira sua internet."); }
+}
+window.addEventListener("pagehide", ()=>{ if(tSalvar) gravar(); });
+document.addEventListener("visibilitychange", ()=>{ if(document.visibilityState==="hidden" && tSalvar) gravar(); });
+
+const HUMORES = [
+  {v:1, nome:"Muito mal"}, {v:2, nome:"Mal"}, {v:3, nome:"Mais ou menos"}, {v:4, nome:"Bem"}, {v:5, nome:"Muito bem"}
+];
+const COR = {1:"#4A1E22",2:"#893621",3:"#B8664A",4:"#C28A5A",5:"#E3BD8F"};
+
+function carinhaSVG(v){
+  const boca = {
+    1:'<path d="M15 32c3-4 6-5.5 9-5.5s6 1.5 9 5.5"/>',
+    2:'<path d="M16 31c2.5-2 5-3 8-3s5.5 1 8 3"/>',
+    3:'<path d="M16 29.5h16"/>',
+    4:'<path d="M16 28c2.5 2 5 3 8 3s5.5-1 8-3"/>',
+    5:'<path d="M15 26.5c3 4.5 6 6 9 6s6-1.5 9-6"/>'
+  }[v];
+  const olhos = v===1 ? '<path d="M15.5 18.5l4 1.5M32.5 18.5l-4 1.5"/><circle cx="18" cy="22" r="1.4" fill="#2C1216" stroke="none"/><circle cx="30" cy="22" r="1.4" fill="#2C1216" stroke="none"/>'
+             : '<circle cx="18" cy="20" r="1.6" fill="#2C1216" stroke="none"/><circle cx="30" cy="20" r="1.6" fill="#2C1216" stroke="none"/>';
+  return `<svg viewBox="0 0 48 48" aria-hidden="true"><circle class="rosto" cx="24" cy="24" r="21" fill="#EADFD2" stroke="#D6C4B1" stroke-width="1.2"/><g fill="none" stroke="#2C1216" stroke-width="2.2" stroke-linecap="round">${olhos}${boca}</g></svg>`;
+}
+
+/* ---------- Datas ---------- */
+const pad = n => String(n).padStart(2,"0");
+const chaveDia = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const hoje = () => chaveDia(new Date());
+function diaCurto(k){ const [y,m,d]=k.split("-").map(Number); const dt=new Date(y,m-1,d); return dt.toLocaleDateString("pt-BR",{day:"2-digit",month:"short"}).replace(".",""); }
+function diasAtras(n){ const d=new Date(); d.setDate(d.getDate()-n); return chaveDia(d); }
+const novoId = () => Math.random().toString(36).slice(2,10);
+
+let D = novoD();
+
+/* Perfil (cadastro breve) fica separado dos registros */
+const DIAS = ["domingo","segunda","terça","quarta","quinta","sexta","sábado"];
+let P = {};
+function salvarPerfil(){ salvar(); }
+
+/* ---------- Utilidades ---------- */
+const $ = s => document.querySelector(s);
+const esc = s => s.replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let tTimer;
+function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("on"); clearTimeout(tTimer); tTimer=setTimeout(()=>t.classList.remove("on"),1800); }
+function sairDoDemo(){}
+async function copiar(txt){
+  try{ await navigator.clipboard.writeText(txt); toast("Copiado"); }
+  catch(e){ toast("Não consegui copiar neste navegador"); }
+}
+
+/* ---------- Navegação ---------- */
+const TITULOS = {sessao:'Pra sua próxima <em>sessão</em>', metas:'Suas <em>metas</em>', casal:'Vocês <em>dois</em>', mais:'Lembretes e <em>ajustes</em>'};
+const SUBS = {hoje:'Como você está se sentindo hoje?', sessao:'Anote o que quer levar pra conversa e escreva com calma no bloco de notas.', metas:'Pra onde você quer ir com a terapia.', casal:'O espaço de vocês dentro do diário.', mais:'Deixe o diário do seu jeito.'};
+function tituloHoje(){ return P.apelido ? `Oi, <em>${esc(P.apelido)}!</em>` : 'Oi!'; }
+function ir(v){
+  TITULOS.hoje = tituloHoje();
+  document.querySelectorAll("[data-view]").forEach(s=>s.hidden = s.id!=="v-"+v);
+  document.querySelectorAll("nav.abas button").forEach(b=>{ if(b.dataset.go===v) b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current"); });
+  $("#titulo").innerHTML = TITULOS[v];
+  $("#subtitulo").textContent = SUBS[v];
+  window.scrollTo(0,0);
+}
+document.querySelectorAll("nav.abas button").forEach(b=>b.addEventListener("click",()=>ir(b.dataset.go)));
+
+/* ---------- Humor ---------- */
+let escolhido = null;
+function sincronizarHoje(){
+  escolhido = D.humor[hoje()]?.v || null;
+  $("#notaHumor").value = D.humor[hoje()]?.nota || "";
+  $("#statusHumor").textContent = D.humor[hoje()] ? "Dia de hoje já registrado ✦" : "";
+}
+function renderCarinhas(){
+  $("#carinhas").innerHTML = HUMORES.map(h=>`<button class="carinha" data-v="${h.v}" aria-pressed="${escolhido===h.v}">${carinhaSVG(h.v)}${h.nome}</button>`).join("");
+  $("#carinhas").querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>{ escolhido=+b.dataset.v; renderCarinhas(); }));
+}
+
+$("#salvarHumor").addEventListener("click",()=>{
+  if(!escolhido){ toast("Escolha uma carinha primeiro"); return; }
+  sairDoDemo();
+  D.humor[hoje()] = {v:escolhido, nota:$("#notaHumor").value.trim()};
+  salvar(); renderTudo();
+  $("#statusHumor").textContent = "Salvo ✱";
+  toast("Seu dia foi registrado");
+});
+
+let periodo = 30;
+document.querySelectorAll("[data-periodo]").forEach(b=>b.addEventListener("click",()=>{
+  periodo=+b.dataset.periodo;
+  document.querySelectorAll("[data-periodo]").forEach(x=>x.setAttribute("aria-pressed", x===b));
+  renderGrafico();
+}));
+
+function renderGrafico(){
+  const W=340,H=170,L=34,R=10,T=12,B=26;
+  const dias=[]; for(let i=periodo-1;i>=0;i--) dias.push(diasAtras(i));
+  const x=i=> L + (dias.length===1?0: i*(W-L-R)/(dias.length-1));
+  const y=v=> T + (5-v)*(H-T-B)/4;
+  let s="";
+  for(let v=1; v<=5; v++){
+    s+=`<line x1="${L}" x2="${W-R}" y1="${y(v)}" y2="${y(v)}" stroke="#E1D3C3" stroke-width="1"/>`;
+    s+=`<g transform="translate(4 ${y(v)-11}) scale(.46)">${carinhaSVG(v).replace('<svg viewBox="0 0 48 48" aria-hidden="true">','').replace('</svg>','')}</g>`;
+  }
+  // linha com quebras onde não há registro
+  let caminho="", area="", seg=[];
+  const fecharSeg=()=>{ if(seg.length>1){ area+=`M${seg[0][0]},${H-B} `+seg.map(p=>`L${p[0]},${p[1]}`).join(" ")+` L${seg[seg.length-1][0]},${H-B} Z `; } seg=[]; };
+  dias.forEach((k,i)=>{
+    const r=D.humor[k];
+    if(r){ caminho += (seg.length? "L":"M")+x(i)+","+y(r.v)+" "; seg.push([x(i),y(r.v)]); }
+    else fecharSeg();
+  });
+  fecharSeg();
+  s+=`<path d="${area}" fill="#A8472C" opacity=".10"/>`;
+  s+=`<path d="${caminho}" fill="none" stroke="#A8472C" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>`;
+  dias.forEach((k,i)=>{ const r=D.humor[k]; if(r){ const ult = k===hoje(); s+=`<circle cx="${x(i)}" cy="${y(r.v)}" r="${ult?5:3.2}" fill="${ult?"#2C1216":"#A8472C"}" stroke="#FBF7F1" stroke-width="1.5"/>`; }});
+  // rótulos de data
+  const marcas = periodo===7 ? dias.map((_,i)=>i) : [0,7,14,21,29];
+  marcas.forEach(i=>{ s+=`<text x="${x(i)}" y="${H-7}" font-size="10" fill="#6C5448" text-anchor="${i===0?"start":i===dias.length-1?"end":"middle"}" font-family="Outfit, sans-serif">${i===dias.length-1?"hoje":diaCurto(dias[i])}</text>`; });
+  $("#grafico").innerHTML = s;
+
+  const vals = dias.map(k=>D.humor[k]?.v).filter(Boolean);
+  const media = vals.length ? (vals.reduce((a,b)=>a+b,0)/vals.length) : null;
+  const bons = vals.filter(v=>v>=4).length;
+  $("#resumo").innerHTML = `
+    <div><b>${vals.length}</b><span>dias registrados</span></div>
+    <div><b>${media? media.toFixed(1).replace(".",","):"–"}</b><span>média (1 a 5)</span></div>
+    <div><b>${bons}</b><span>dias bons</span></div>`;
+
+  const regs = Object.keys(D.humor).sort().reverse().slice(0,5);
+  $("#historico").innerHTML = regs.length ? regs.map(k=>`<li>${carinhaSVG(D.humor[k].v)}<span class="d">${k===hoje()?"hoje":diaCurto(k)}</span><span>${D.humor[k].nota?esc(D.humor[k].nota):'<span style="color:#6C5448">'+HUMORES[D.humor[k].v-1].nome+'</span>'}</span></li>`).join("")
+    : `<li style="border:0;color:#6C5448;font-style:italic">Seus registros vão aparecer aqui.</li>`;
+}
+
+/* ---------- Notas pra sessão ---------- */
+$("#formNota").addEventListener("submit",e=>{
+  e.preventDefault();
+  const t=$("#novaNota").value.trim(); if(!t) return;
+  sairDoDemo();
+  D.notas.unshift({id:novoId(), txt:t, feito:false, em:hoje()});
+  $("#novaNota").value=""; salvar(); renderTudo(); toast("Anotado");
+});
+function itemNota(n){
+  return `<li class="item ${n.feito?"feito":""}">
+    <button class="check" role="checkbox" aria-checked="${n.feito}" aria-label="Marcar como conversado" data-nota="${n.id}"></button>
+    <div class="txt">${esc(n.txt)}<div class="meta-d">anotado em ${diaCurto(n.em)}</div></div>
+    <button class="x" aria-label="Apagar anotação" data-apaga-nota="${n.id}">×</button></li>`;
+}
+function textoNotas(){
+  const p = D.notas.filter(n=>!n.feito);
+  return "Coisas que quero falar na próxima sessão:\n" + p.map(n=>"• "+n.txt).join("\n");
+}
+function renderNotas(){
+  const p=D.notas.filter(n=>!n.feito), f=D.notas.filter(n=>n.feito);
+  $("#notasPendentes").innerHTML = p.length ? p.map(itemNota).join("") : `<p class="vazio">Nada pendente. Quando lembrar de algo, anota aqui.</p>`;
+  $("#notasFeitas").innerHTML = f.length ? f.map(itemNota).join("") : `<p class="vazio">O que você marcar aparece aqui.</p>`;
+  $("#enviarNotas").href = "https://wa.me/?text=" + encodeURIComponent(textoNotas());
+  document.querySelectorAll("[data-nota]").forEach(b=>b.addEventListener("click",()=>{ sairDoDemoKeep(); const n=D.notas.find(x=>x.id===b.dataset.nota); if(n){n.feito=!n.feito; salvar(); renderNotas();} }));
+  document.querySelectorAll("[data-apaga-nota]").forEach(b=>b.addEventListener("click",()=>{ D.notas=D.notas.filter(x=>x.id!==b.dataset.apagaNota); salvar(); renderNotas(); }));
+}
+$("#copiarNotas").addEventListener("click",()=>copiar(textoNotas()));
+function sairDoDemoKeep(){ /* interagir com exemplos mantém os exemplos */ }
+
+/* ---------- Metas (individuais e do casal usam o mesmo componente) ---------- */
+function ligaFormMeta(formSel, inputSel, getLista, vazio){
+  $(formSel).addEventListener("submit",e=>{
+    e.preventDefault();
+    const t=$(inputSel).value.trim(); if(!t) return;
+    sairDoDemo();
+    getLista().unshift({id:novoId(), txt:t, passos:[]});
+    $(inputSel).value=""; salvar(); renderTudo(); toast("Meta criada");
+  });
+}
+ligaFormMeta("#formMeta","#novaMeta",()=>D.metas);
+ligaFormMeta("#formMetaCasal","#novaMetaCasal",()=>D.casal.metas);
+function renderListaMetas(el, getLista, vazio){
+  const lista=getLista(), box=$(el);
+  if(!lista.length){ box.innerHTML=`<p class="vazio">${vazio}</p>`; return; }
+  box.innerHTML = lista.map(m=>{
+    const tot=m.passos.length, ok=m.passos.filter(p=>p.feito).length, pct= tot? Math.round(ok/tot*100):0;
+    return `<div class="meta">
+      <div class="meta-cab"><div class="meta-titulo">${esc(m.txt)}</div><button class="x" aria-label="Apagar meta" data-apaga-meta="${m.id}">×</button></div>
+      <div class="barra"><i style="width:${pct}%"></i></div>
+      <div class="pct">${tot? `${ok} de ${tot} passos`:"Adicione pequenos passos para essa meta"}</div>
+      <ul class="passos">${m.passos.map(p=>`<li class="item ${p.feito?"feito":""}"><button class="check" role="checkbox" aria-checked="${p.feito}" aria-label="Marcar passo" data-passo="${m.id}|${p.id}"></button><div class="txt">${esc(p.txt)}</div><button class="x" aria-label="Apagar passo" data-apaga-passo="${m.id}|${p.id}">×</button></li>`).join("")}</ul>
+      <form class="add-passo" data-form-passo="${m.id}"><input type="text" placeholder="+ pequeno passo" aria-label="Novo passo"><button class="btn sec peq" type="submit">Adicionar</button></form>
+    </div>`;
+  }).join("");
+  const re=()=>renderListaMetas(el,getLista,vazio);
+  box.querySelectorAll("[data-passo]").forEach(b=>b.addEventListener("click",()=>{ const [mi,pi]=b.dataset.passo.split("|"); const p=getLista().find(m=>m.id===mi)?.passos.find(p=>p.id===pi); if(p){p.feito=!p.feito; salvar(); re(); if(p.feito) toast("Mais um passo ✱");} }));
+  box.querySelectorAll("[data-apaga-passo]").forEach(b=>b.addEventListener("click",()=>{ const [mi,pi]=b.dataset.apagaPasso.split("|"); const m=getLista().find(m=>m.id===mi); if(m){m.passos=m.passos.filter(p=>p.id!==pi); salvar(); re();} }));
+  box.querySelectorAll("[data-apaga-meta]").forEach(b=>b.addEventListener("click",()=>{ const l=getLista(); const i=l.findIndex(m=>m.id===b.dataset.apagaMeta); if(i>-1){ l.splice(i,1); salvar(); re(); } }));
+  box.querySelectorAll("[data-form-passo]").forEach(f=>f.addEventListener("submit",e=>{ e.preventDefault(); const inp=f.querySelector("input"); const t=inp.value.trim(); if(!t) return; getLista().find(m=>m.id===f.dataset.formPasso).passos.push({id:novoId(),txt:t,feito:false}); salvar(); re(); }));
+}
+function renderMetas(){
+  renderListaMetas("#metas",()=>D.metas,"Crie sua primeira meta. Vale conversar sobre ela na sessão.");
+  renderListaMetas("#metasCasal",()=>D.casal.metas,"Criem a primeira meta de vocês. Pode ser algo pequeno.");
+}
+
+/* ---------- Casal: combinados com meta semanal ---------- */
+const LETRAS=["S","T","Q","Q","S","S","D"];
+function diasDaSemana(){ // segunda a domingo da semana atual
+  const d=new Date(); const off=(d.getDay()+6)%7; d.setDate(d.getDate()-off);
+  return Array.from({length:7},(_,i)=>{ const x=new Date(d); x.setDate(d.getDate()+i); return chaveDia(x); });
+}
+$("#vezesComb").innerHTML = [1,2,3,4,5,6,7].map(n=>`<option value="${n}">${n===7?"todo dia":n+"x por semana"}</option>`).join("");
+$("#vezesComb").value="3";
+$("#formComb").addEventListener("submit",e=>{
+  e.preventDefault();
+  const t=$("#novoComb").value.trim(); if(!t){ $("#novoComb").focus(); return; }
+  sairDoDemo();
+  D.casal.combinados.unshift({id:novoId(), txt:t, vezes:+$("#vezesComb").value, marcas:[]});
+  $("#novoComb").value=""; salvar(); renderTudo(); toast("Combinado registrado");
+});
+function renderCasal(){
+  $("#parTitulo").textContent = `Você e ${D.casal.par || "seu amor"}`;
+  const conectado = !!(casalInfo && casalInfo.members.length===2);
+  $("#conectarCard").hidden = conectado;
+  $("#semConvite").hidden = !!coupleId;
+  $("#comConvite").hidden = !coupleId || conectado;
+  if(coupleId && !conectado){
+    $("#codigoMostrado").textContent = coupleId;
+    $("#enviarCodigo").href = "https://wa.me/?text="+encodeURIComponent(`Amor, entra no Meu diário da terapia (${location.origin}) e, na aba Casal, digita este código pra gente conectar: ${coupleId}`);
+  }
+  $("#parTexto").textContent = conectado ? "Combinados e metas desta aba aparecem pros dois. Seu humor e suas anotações continuam só seus." : "Enquanto vocês não conectam, o que você criar aqui fica só com você. Quando conectarem, passa a aparecer pros dois.";
+  const av=$(".avatares").children; av[0].textContent=(P.apelido||"V")[0].toUpperCase(); av[1].textContent=(D.casal.par||"A")[0].toUpperCase();
+  const l=D.casal.combinados, sem=diasDaSemana(), h=hoje();
+  l.forEach(c=>{ if(!c.vezes) c.vezes=1; if(!c.marcas) c.marcas=[]; });
+  const cumpridos=l.filter(c=>sem.filter(k=>c.marcas.includes(k)).length>=c.vezes).length;
+  $("#resumoComb").innerHTML = l.length ? `<b>${cumpridos} de ${l.length}</b> combinados cumpridos nesta semana` : "";
+  $("#combinados").innerHTML = l.length ? l.map(c=>{
+    const feitas=sem.filter(k=>c.marcas.includes(k)).length, pct=Math.min(100,Math.round(feitas/c.vezes*100)), ok=feitas>=c.vezes;
+    return `<li class="comb ${ok?"ok":""}">
+      <div class="meta-cab"><div class="meta-titulo">${esc(c.txt)}</div><button class="x" aria-label="Apagar combinado" data-apaga-comb="${c.id}">×</button></div>
+      <div class="barra"><i style="width:${pct}%"></i></div>
+      <div class="pct">${ok ? "Cumprido nesta semana ✦" : `${feitas} de ${c.vezes} ${c.vezes===1?"vez":"vezes"} nesta semana`}</div>
+      <div class="semana" role="group" aria-label="Dias em que aconteceu">${sem.map((k,i)=>`<button data-comb="${c.id}" data-dia="${k}" aria-pressed="${c.marcas.includes(k)}" ${k>h?"disabled":""} aria-label="${DIAS[(i+1)%7]}" class="${k===h?"hj":""}">${LETRAS[i]}</button>`).join("")}</div>
+    </li>`;}).join("")
+    : `<p class="vazio">Os combinados que vocês fizerem na sessão podem ficar aqui.</p>`;
+  document.querySelectorAll("[data-comb]").forEach(b=>b.addEventListener("click",()=>{ const c=l.find(x=>x.id===b.dataset.comb); if(!c) return; const k=b.dataset.dia; const i=c.marcas.indexOf(k); if(i>-1) c.marcas.splice(i,1); else { c.marcas.push(k); } salvar(); renderCasal(); const f=sem.filter(x=>c.marcas.includes(x)).length; if(i===-1 && f===c.vezes) toast("Combinado cumprido nesta semana ✦"); }));
+  document.querySelectorAll("[data-apaga-comb]").forEach(b=>b.addEventListener("click",()=>{ D.casal.combinados=l.filter(x=>x.id!==b.dataset.apagaComb); salvar(); renderCasal(); }));
+}
+/* Conexão do casal por código */
+function gerarCodigo(){ const c="ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; let r=""; const a=new Uint32Array(6); crypto.getRandomValues(a); a.forEach(n=>r+=c[n%c.length]); return r; }
+function ouvirCasal(){
+  if(pararCasal) pararCasal();
+  pararCasal = db.collection("couples").doc(coupleId).onSnapshot(s=>{
+    if(!s.exists){ casalInfo=null; coupleId=null; P.coupleId=null; salvar(); renderCasal(); return; }
+    casalInfo = s.data();
+    if(!casalInfo.members.includes(uid)){ casalInfo=null; coupleId=null; P.coupleId=null; salvar(); renderCasal(); return; }
+    const outro = casalInfo.members.find(m=>m!==uid);
+    D.casal = {par: (outro && casalInfo.nomes?.[outro]) || D.casal.par || "", combinados: casalInfo.combinados||[], metas: casalInfo.metas||[]};
+    renderCasal(); renderMetas();
+  }, e=>console.error(e));
+}
+$("#criarConvite").addEventListener("click",async ()=>{
+  const b=$("#criarConvite"); b.disabled=true;
+  for(let t=0;t<3;t++){
+    const code=gerarCodigo();
+    try{
+      await db.collection("couples").doc(code).set({members:[uid], nomes:{[uid]:P.apelido||""}, combinados:D.casal.combinados, metas:D.casal.metas, criadoEm:FV.serverTimestamp()});
+      coupleId=code; P.coupleId=code; await gravar(); ouvirCasal(); b.disabled=false; return;
+    }catch(e){ console.error(e); }
+  }
+  b.disabled=false; toast("Não consegui criar o convite. Tente de novo.");
+});
+$("#formEntrarCasal").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const code=$("#codigoCasal").value.trim().toUpperCase(), err=$("#erroCasal"); err.hidden=true;
+  if(code.length!==6){ err.textContent="O código tem 6 letras e números."; err.hidden=false; return; }
+  try{
+    await db.collection("couples").doc(code).update({members:FV.arrayUnion(uid), ["nomes."+uid]:P.apelido||""});
+    coupleId=code; P.coupleId=code; await gravar(); ouvirCasal(); $("#codigoCasal").value=""; toast("Vocês estão conectados ✦");
+  }catch(e2){
+    console.error(e2);
+    err.textContent = e2.code==="not-found" ? "Não encontrei esse código. Confere com seu amor." : "Esse código não está mais disponível. Peça um novo convite.";
+    err.hidden=false;
+  }
+});
+$("#copiarCodigo").addEventListener("click",()=>copiar(coupleId||""));
+
+function mostrarAbaCasal(){
+  const on = P.tipo==="casal" || P.tipo==="ambos" || (!!P.casal && !P.tipo);
+  $("#menuCasal").hidden=!on;
+  $("#abaCasal").hidden=!on;
+  document.documentElement.style.setProperty("--n-abas", on?5:4);
+}
+
+/* ---------- Mais ---------- */
+function linkLembrete(){
+  const [h,m]=($("#horaLembrete").value||"21:00").split(":").map(Number);
+  const d=new Date(); d.setDate(d.getDate()+1);
+  const ini=`${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(h)}${pad(m)}00`;
+  const f=new Date(d); f.setHours(h, m+10);
+  const fim=`${f.getFullYear()}${pad(f.getMonth()+1)}${pad(f.getDate())}T${pad(f.getHours())}${pad(f.getMinutes())}00`;
+  const p=new URLSearchParams({action:"TEMPLATE",text:"✱ Diário da terapia",details:"Hora de registrar seu humor e anotar o que quer levar pra sessão.",dates:`${ini}/${fim}`,ctz:"America/Sao_Paulo",recur:"RRULE:FREQ=DAILY"});
+  $("#linkLembrete").href="https://calendar.google.com/calendar/render?"+p.toString();
+}
+$("#horaLembrete").addEventListener("input",linkLembrete);
+$("#copiarBackup").addEventListener("click",()=>copiar(JSON.stringify(D)));
+$("#apagarTudo").addEventListener("click",()=>$("#confirmaApagar").hidden=false);
+$("#naoApagar").addEventListener("click",()=>$("#confirmaApagar").hidden=true);
+$("#simApagar").addEventListener("click",()=>{ D={...novoD(), casal:D.casal}; escolhido=null; $("#notaHumor").value=""; $("#statusHumor").textContent=""; salvar(); renderTudo(); $("#confirmaApagar").hidden=true; toast("Tudo apagado"); });
+
+
+/* ---------- Entrada ---------- */
+let criando = false;
+const MSG_AUTH = {
+  "auth/invalid-email":"Esse e-mail não parece válido.",
+  "auth/missing-password":"Digite sua senha.",
+  "auth/weak-password":"A senha precisa ter pelo menos 6 caracteres.",
+  "auth/email-already-in-use":"Já existe uma conta com esse e-mail. Toque em Entrar.",
+  "auth/invalid-credential":"E-mail ou senha incorretos.",
+  "auth/wrong-password":"E-mail ou senha incorretos.",
+  "auth/user-not-found":"Não encontrei uma conta com esse e-mail.",
+  "auth/too-many-requests":"Muitas tentativas. Espere um pouco e tente de novo.",
+  "auth/popup-closed-by-user":"A janela do Google foi fechada antes de terminar.",
+  "auth/popup-blocked":"O navegador bloqueou a janela do Google. Tente entrar com e-mail e senha.",
+  "auth/network-request-failed":"Sem conexão com a internet.",
+  "auth/unauthorized-domain":"Este endereço ainda não foi autorizado no Firebase."
+};
+function erroEntrar(e){ const el=$("#erroEntrar"); el.textContent = MSG_AUTH[e?.code] || "Não consegui entrar. Tente de novo."; el.hidden=false; console.error(e); }
+function mostrarPasso(id){ ["passoCarregando","passoEntrar","passoTermo","passoCadastro"].forEach(p=>$("#"+p).hidden = p!==id); $("#entrada").hidden=false; $("#entrada").scrollTop=0; }
+function mostrarTermo(){ mostrarPasso("passoTermo"); }
+function entrarNoApp(){ $("#entrada").hidden=true; ir("hoje"); }
+$("#entrarGoogle").addEventListener("click",()=>{ $("#erroEntrar").hidden=true; auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(erroEntrar); });
+$("#formEntrar").addEventListener("submit",e=>{
+  e.preventDefault(); $("#erroEntrar").hidden=true;
+  const email=$("#email").value.trim(), senha=$("#senha").value;
+  (criando ? auth.createUserWithEmailAndPassword(email, senha) : auth.signInWithEmailAndPassword(email, senha)).catch(erroEntrar);
+});
+$("#esqueci").addEventListener("click",()=>{
+  const email=$("#email").value.trim();
+  if(!email){ erroEntrar({code:"x"}); $("#erroEntrar").textContent="Digite seu e-mail acima e toque de novo em Esqueci minha senha."; $("#email").focus(); return; }
+  auth.sendPasswordResetEmail(email).then(()=>{ $("#erroEntrar").hidden=false; $("#erroEntrar").textContent="Te mandei um e-mail pra criar uma nova senha. Confira também o spam."; }).catch(erroEntrar);
+});
+$("#trocarModo").addEventListener("click",()=>{
+  criando=!criando; $("#erroEntrar").hidden=true;
+  $("#botaoEntrar").textContent = criando ? "Criar conta" : "Entrar";
+  $("#textoAlt").textContent = criando ? "Já tem conta?" : "Primeira vez aqui?";
+  $("#trocarModo").textContent = criando ? "Entrar" : "Criar minha conta";
+  $("#senha").placeholder = criando ? "Crie uma senha (mín. 6 caracteres)" : "Sua senha";
+  $("#senha").autocomplete = criando ? "new-password" : "current-password";
+});
+
+auth.onAuthStateChanged(async user=>{
+  if(pararCasal){ pararCasal(); pararCasal=null; }
+  if(!user){ uid=null; coupleId=null; casalInfo=null; D=novoD(); P={}; renderTudo(); mostrarPasso("passoEntrar"); return; }
+  mostrarPasso("passoCarregando");
+  uid=user.uid;
+  $("#contaEmail").textContent = "Conectado como " + (user.email || "sua conta Google");
+  try{
+    const snap = await db.collection("users").doc(uid).get();
+    const d = snap.exists ? snap.data() : {};
+    D = {...novoD(), ...(d.diario||{})};
+    D.casal = d.casalLocal || novoD().casal;
+    P = d.perfil || {};
+  }catch(e){ console.error(e); D=novoD(); P={}; }
+  coupleId = P.coupleId || null;
+  if(coupleId) ouvirCasal();
+  sincronizarHoje(); preencherPerfil(); renderTudo();
+  if(!P.aceiteEm || !P.apelido) mostrarTermo(); else entrarNoApp();
+});
+
+$("#aceito").addEventListener("change",e=>$("#comecar").disabled=!e.target.checked);
+$("#comecar").addEventListener("click",()=>{
+  P.aceiteEm = new Date().toISOString();
+  $("#passoTermo").hidden=true; $("#passoCadastro").hidden=false; $("#entrada").scrollTop=0;
+  $("#cApelido").value=P.apelido||""; $("#cNome").value=P.nome||""; $("#cIdade").value=P.idade||"";
+  $("#cDia").value = P.dia ?? 2; $("#cHora").value = P.hora || "19:00";
+  marcarTipo("#cTipo", P.tipo||"individual"); $("#cPar").value=D.casal.par||""; $("#cParBox").hidden=!P.tipo||P.tipo==="individual";
+  $("#cValor").value=P.valor||""; $("#cPagTipo").value=P.pagTipo||"sessao"; $("#cPagDia").value=P.pagDia||""; $("#cPagDiaBox").hidden=(P.pagTipo||"sessao")!=="mensal";
+  setTimeout(()=>$("#cApelido").focus(),50);
+});
+$("#formCadastro").addEventListener("submit",e=>{
+  e.preventDefault();
+  const apelido=$("#cApelido").value.trim(); if(!apelido){ $("#cApelido").focus(); return; }
+  const tipo=tipoEscolhido("#cTipo");
+  P={...P, apelido, nome:$("#cNome").value.trim(), idade:$("#cIdade").value, dia:+$("#cDia").value, hora:$("#cHora").value||"19:00", tipo,
+     valor:$("#cValor").value, pagTipo:$("#cPagTipo").value, pagDia:$("#cPagDia").value};
+  if(tipo!=="individual" && $("#cPar").value.trim()) D.casal.par=$("#cPar").value.trim();
+  preencherPerfil(); renderTudo();
+  gravar();
+  abrirComTransicao();
+});
+function abrirComTransicao(){
+  const a=$("#abertura");
+  $("#aberturaTitulo").textContent = `Prontinho, ${P.apelido}`;
+  a.hidden=false; a.classList.remove("sai");
+  const reduz = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  setTimeout(()=>{ entrarNoApp(); $("#passoCadastro").hidden=true; a.classList.add("sai"); setTimeout(()=>a.hidden=true, reduz?0:600); }, reduz?400:1500);
+}
+$("#sair").addEventListener("click",async ()=>{ if(tSalvar) await gravar(); $("#aceito").checked=false; $("#comecar").disabled=true; auth.signOut(); });
+$("#excluirConta").addEventListener("click",()=>$("#confirmaExcluir").hidden=false);
+$("#naoExcluir").addEventListener("click",()=>$("#confirmaExcluir").hidden=true);
+$("#simExcluir").addEventListener("click",async ()=>{
+  const user=auth.currentUser; if(!user) return;
+  try{
+    clearTimeout(tSalvar); tSalvar=null;
+    if(coupleId){ try{ await db.collection("couples").doc(coupleId).update({members:FV.arrayRemove(uid)}); }catch(e){} }
+    await db.collection("users").doc(uid).delete();
+    await user.delete();
+    toast("Sua conta foi excluída");
+  }catch(e){
+    console.error(e);
+    if(e.code==="auth/requires-recent-login"){ toast("Por segurança, saia e entre de novo antes de excluir."); }
+    else toast("Não consegui excluir agora. Tente de novo.");
+  }
+});
+
+function marcarTipo(sel,t){ document.querySelectorAll(sel+" [data-tipo]").forEach(b=>b.setAttribute("aria-checked", b.dataset.tipo===t)); }
+function tipoEscolhido(sel){ return document.querySelector(sel+' [aria-checked="true"]')?.dataset.tipo || "individual"; }
+[["#cTipo","#cParBox"],["#pTipo","#pParBox"]].forEach(([g,box])=>document.querySelectorAll(g+" [data-tipo]").forEach(b=>b.addEventListener("click",()=>{ marcarTipo(g,b.dataset.tipo); $(box).hidden=b.dataset.tipo==="individual"; if(g==="#cTipo" && b.dataset.tipo!=="individual") setTimeout(()=>$("#cPar").focus(),30); })));
+[["#cPagTipo","#cPagDiaBox"],["#pPagTipo","#pPagDiaBox"]].forEach(([s1,box])=>$(s1).addEventListener("change",e=>$(box).hidden=e.target.value!=="mensal"));
+
+/* Pagamento */
+const reais = v => Number(v).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+function proximoPagamento(){
+  if(!P.valor) return null;
+  if(P.pagTipo==="mensal" && P.pagDia){
+    const d=new Date(); d.setHours(9,0,0,0); const dia=Math.min(+P.pagDia,28);
+    let alvo=new Date(d.getFullYear(), d.getMonth(), +P.pagDia);
+    if(alvo.getDate()!==+P.pagDia) alvo=new Date(d.getFullYear(), d.getMonth(), dia);
+    if(alvo < new Date(d.getFullYear(), d.getMonth(), d.getDate())) alvo=new Date(d.getFullYear(), d.getMonth()+1, +P.pagDia);
+    const add=Math.round((alvo - new Date(d.getFullYear(), d.getMonth(), d.getDate()))/864e5);
+    return {d:alvo, add, txt:`todo dia ${P.pagDia}`};
+  }
+  const ps=proximaSessao(); if(!ps) return null;
+  return {d:ps.d, add:ps.add, txt:"no dia de cada sessão"};
+}
+function preencherPagamento(){
+  const pp=proximoPagamento();
+  $("#cardPag").hidden=!pp;
+  if(!pp){ $("#proxPag").hidden=true; return; }
+  const quando = pp.add===0 ? "hoje" : pp.add===1 ? "amanhã" : `em ${pp.add} dias`;
+  $("#proxPag").hidden=false;
+  $("#proxPag").innerHTML = `<div class="dia" style="font-size:20px">R$</div><div class="info"><b>Pagamento ${quando}</b>${reais(P.valor)} · ${pp.txt}</div>`;
+  const ini=new Date(pp.d); ini.setHours(9,0,0,0); const fim=new Date(ini); fim.setMinutes(15);
+  const rr = P.pagTipo==="mensal" ? `RRULE:FREQ=MONTHLY;BYMONTHDAY=${P.pagDia}` : "RRULE:FREQ=WEEKLY";
+  const prm=new URLSearchParams({action:"TEMPLATE",text:`✦ Pagamento da terapia (${reais(P.valor)})`,details:"Lembrete do pagamento da sua terapia com Stefane Rodrigues.",dates:`${fmtGcal(ini)}/${fmtGcal(fim)}`,ctz:"America/Sao_Paulo",recur:rr});
+  $("#linkPag").href="https://calendar.google.com/calendar/render?"+prm.toString();
+  $("#textoPag").textContent = `${reais(P.valor)}, ${pp.txt}. O aviso aparece às 9h do dia do pagamento.`;
+}
+
+/* Menu do topo */
+function abrirMenu(on){ $("#menu").hidden=!on; $("#menuFundo").hidden=!on; $("#abrirMenu").setAttribute("aria-expanded",on); if(on) $("#fecharMenu").focus(); }
+$("#abrirMenu").addEventListener("click",()=>abrirMenu(true));
+$("#fecharMenu").addEventListener("click",()=>abrirMenu(false));
+$("#menuFundo").addEventListener("click",()=>abrirMenu(false));
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") abrirMenu(false); });
+document.querySelectorAll("[data-menu]").forEach(b=>b.addEventListener("click",()=>{ abrirMenu(false); ir(b.dataset.menu); }));
+
+/* ---------- Sessão: próxima data e lembrete ---------- */
+function proximaSessao(){
+  if(P.dia===undefined) return null;
+  const [h,m]=(P.hora||"19:00").split(":").map(Number);
+  const d=new Date(); d.setHours(h,m,0,0);
+  let add=(P.dia - d.getDay() + 7) % 7;
+  if(add===0 && d < new Date()) add=7;
+  d.setDate(d.getDate()+add);
+  return {d, add};
+}
+const horaBR = h => { const [a,b]=(h||"19:00").split(":"); return b==="00" ? `${+a}h` : `${+a}h${b}`; };
+const fmtGcal = d => `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+function preencherPerfil(){
+  const ops = DIAS.map((n,i)=>`<option value="${i}">${n[0].toUpperCase()+n.slice(1)}</option>`).join("");
+  $("#cDia").innerHTML = ops; $("#pDia").innerHTML = ops;
+  $("#cDia").value = P.dia ?? 2;
+  $("#pApelido").value = P.apelido||""; marcarTipo("#pTipo", P.tipo||(P.casal?"casal":"individual")); $("#pPar").value=D.casal.par||""; $("#pParBox").hidden=(P.tipo||"individual")==="individual"; $("#pValor").value=P.valor||""; $("#pPagTipo").value=P.pagTipo||"sessao"; $("#pPagDia").value=P.pagDia||""; $("#pPagDiaBox").hidden=(P.pagTipo||"sessao")!=="mensal"; $("#pDia").value = P.dia ?? 2; $("#pHora").value = P.hora||"19:00";
+  const ps = proximaSessao();
+  if(ps){
+    const quando = ps.add===0 ? "hoje" : ps.add===1 ? "amanhã" : `em ${ps.add} dias`;
+    $("#proxima").hidden=false;
+    $("#proxima").innerHTML = `<div class="dia">${pad(ps.d.getDate())}</div><div class="info"><b>Próxima sessão ${quando}</b>${DIAS[ps.d.getDay()]}, às ${horaBR(P.hora)}</div>`;
+    const ini=new Date(ps.d); ini.setHours(ini.getHours()-1);
+    const fim=new Date(ini); fim.setMinutes(fim.getMinutes()+15);
+    const prm=new URLSearchParams({action:"TEMPLATE",text:"✱ Sessão de terapia em 1 hora",details:"Abra o diário e dê uma olhada no que você anotou pra levar pra sessão.",dates:`${fmtGcal(ini)}/${fmtGcal(fim)}`,ctz:"America/Sao_Paulo",recur:"RRULE:FREQ=WEEKLY"});
+    $("#linkSessao").href="https://calendar.google.com/calendar/render?"+prm.toString();
+    $("#textoLembreteSessao").textContent = `Toda ${DIAS[P.dia]}${P.dia===0||P.dia===6?"":"-feira"}, uma hora antes da sessão, um aviso pra você olhar suas anotações.`;
+  } else { $("#proxima").hidden=true; }
+  preencherPagamento();
+}
+$("#formPerfil").addEventListener("submit",e=>{
+  e.preventDefault();
+  P.apelido=$("#pApelido").value.trim()||P.apelido; P.dia=+$("#pDia").value; P.hora=$("#pHora").value||P.hora; P.tipo=tipoEscolhido("#pTipo"); P.valor=$("#pValor").value; P.pagTipo=$("#pPagTipo").value; P.pagDia=$("#pPagDia").value; if($("#pPar").value.trim()) D.casal.par=$("#pPar").value.trim(); salvar();
+  salvarPerfil(); preencherPerfil(); mostrarAbaCasal(); renderCasal(); toast("Alterações salvas");
+});
+
+/* Explicações: lembra quais a pessoa fechou */
+function fechadas(){ try{ return JSON.parse(localStorage.getItem(CHAVE+"-porque"))||[]; }catch(e){ return []; } }
+document.querySelectorAll("details.porque").forEach(d=>{
+  if(fechadas().includes(d.dataset.porque)) d.open=false;
+  d.addEventListener("toggle",()=>{ let f=fechadas().filter(x=>x!==d.dataset.porque); if(!d.open) f.push(d.dataset.porque); try{ localStorage.setItem(CHAVE+"-porque", JSON.stringify(f)); }catch(e){} });
+});
+
+/* ---------- Início ---------- */
+preencherPerfil();
+$("#dataHoje").textContent = new Date().toLocaleDateString("pt-BR",{weekday:"short", day:"numeric", month:"short"}).replace(/\./g,"");
+/* ---------- Bloco de notas ---------- */
+let editandoNota=null;
+const abertas=new Set();
+$("#formBloco").addEventListener("submit",e=>{
+  e.preventDefault();
+  const titulo=$("#blocoTitulo").value.trim(), texto=$("#blocoTexto").value.trim();
+  if(!texto && !titulo){ $("#blocoTexto").focus(); return; }
+  sairDoDemo(); if(!D.bloco) D.bloco=[];
+  if(editandoNota){ const n=D.bloco.find(x=>x.id===editandoNota); if(n){ n.titulo=titulo; n.texto=texto; n.editado=hoje(); } toast("Nota atualizada"); }
+  else { D.bloco.unshift({id:novoId(), titulo, texto, em:hoje()}); toast("Nota salva"); }
+  limparBloco(); salvar(); renderTudo();
+});
+function limparBloco(){ editandoNota=null; $("#blocoTitulo").value=""; $("#blocoTexto").value=""; $("#blocoSalvar").textContent="Salvar nota"; $("#blocoCancelar").hidden=true; }
+$("#blocoCancelar").addEventListener("click",limparBloco);
+function renderBloco(){
+  const l=D.bloco||[];
+  $("#bloco").innerHTML = l.length ? l.map(n=>{
+    const longo=(n.texto||"").length>220 || (n.texto||"").split("\n").length>4, aberta=abertas.has(n.id);
+    return `<article class="nota">
+      ${n.titulo?`<h3>${esc(n.titulo)}</h3>`:""}
+      <div class="quando">escrita em ${diaCurto(n.em)}${n.editado&&n.editado!==n.em?` · editada em ${diaCurto(n.editado)}`:""}</div>
+      ${n.texto?`<div class="corpo ${longo&&!aberta?"curto":""}">${esc(n.texto)}</div>`:""}
+      <div class="acoes">
+        ${longo?`<button data-ler="${n.id}">${aberta?"Ler menos":"Ler tudo"}</button>`:""}
+        <button data-editar="${n.id}">Editar</button>
+        <button data-levar="${n.id}">Levar pra sessão</button>
+        <button data-apaga-bloco="${n.id}" aria-label="Apagar nota">Apagar</button>
+      </div>
+    </article>`;}).join("")
+    : `<p class="vazio">Suas notas vão aparecer aqui.</p>`;
+  document.querySelectorAll("[data-ler]").forEach(b=>b.addEventListener("click",()=>{ const id=b.dataset.ler; abertas.has(id)?abertas.delete(id):abertas.add(id); renderBloco(); }));
+  document.querySelectorAll("[data-editar]").forEach(b=>b.addEventListener("click",()=>{ const n=l.find(x=>x.id===b.dataset.editar); if(!n) return; editandoNota=n.id; $("#blocoTitulo").value=n.titulo||""; $("#blocoTexto").value=n.texto||""; $("#blocoSalvar").textContent="Salvar alterações"; $("#blocoCancelar").hidden=false; $("#formBloco").scrollIntoView({behavior:"smooth",block:"center"}); $("#blocoTexto").focus(); }));
+  document.querySelectorAll("[data-levar]").forEach(b=>b.addEventListener("click",()=>{ const n=l.find(x=>x.id===b.dataset.levar); if(!n) return; const t=n.titulo || (n.texto.length>70? n.texto.slice(0,70)+"…" : n.texto); D.notas.unshift({id:novoId(), txt:t, feito:false, em:hoje()}); salvar(); renderNotas(); toast("Adicionado ao que levar pra sessão"); }));
+  document.querySelectorAll("[data-apaga-bloco]").forEach(b=>b.addEventListener("click",()=>{ if(b.dataset.confirma!=="1"){ b.dataset.confirma="1"; b.textContent="Toque de novo pra apagar"; return; } D.bloco=l.filter(x=>x.id!==b.dataset.apagaBloco); salvar(); renderBloco(); }));
+}
+function renderTudo(){ renderBloco(); $("#avisoDemo").hidden = !D.demo; renderCarinhas(); renderGrafico(); renderNotas(); renderMetas(); renderCasal(); mostrarAbaCasal(); }
+renderTudo(); linkLembrete();
+mostrarPasso("passoCarregando");
+</script>
+</body>
+</html>
